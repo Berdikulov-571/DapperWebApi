@@ -1,6 +1,8 @@
-﻿using DapperInWebApi.Models;
+﻿using Dapper;
+using DapperInWebApi.Models;
 using DapperInWebApi.Service;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 
 namespace DapperInWebApi.Controllers
 {
@@ -28,6 +30,25 @@ namespace DapperInWebApi.Controllers
             UserService.Delete(UseId);
 
             return Ok("Deleted");
+        }
+
+        [HttpGet]
+        public async ValueTask<IActionResult> GetALlMultipleQueryUsers()
+        {
+            string connectionString = WebApplication.CreateBuilder().Configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = $"select * from userTable; select * from persons;";
+
+                var users = await connection.QueryMultipleAsync(query);
+
+                var firstTable = users.ReadAsync<User>().Result;
+
+                var secondTable = users.ReadAsync<Person>().Result;
+
+                return Ok(secondTable);
+            }
         }
     }
 }

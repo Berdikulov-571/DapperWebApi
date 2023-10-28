@@ -17,7 +17,7 @@ namespace DapperInWebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromForm]User user)
+        public IActionResult CreateUser([FromForm] User user)
         {
             UserService.Create(user);
 
@@ -47,7 +47,11 @@ namespace DapperInWebApi.Controllers
 
                 var secondTable = users.ReadAsync<Person>().Result;
 
-                return Ok(secondTable);
+                return Ok(new
+                {
+                    Users = firstTable,
+                    Persons = secondTable
+                });
             }
         }
     }

@@ -10,10 +10,11 @@ namespace DapperInWebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        string? connectionString = WebApplication.CreateBuilder().Configuration.GetConnectionString("DefaultConnection");
         [HttpGet]
         public IActionResult GetAllUsers()
-        {
-            return Ok(UserService.GetAll());
+            {
+            return Ok(UserService.GetAll(connectionString));
         }
 
         [HttpPost]
@@ -35,7 +36,7 @@ namespace DapperInWebApi.Controllers
         [HttpGet]
         public async ValueTask<IActionResult> GetALlMultipleQueryUsers()
         {
-            string connectionString = WebApplication.CreateBuilder().Configuration.GetConnectionString("DefaultConnection");
+            string? connectionString = WebApplication.CreateBuilder().Configuration.GetConnectionString("DefaultConnection");
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -52,6 +53,21 @@ namespace DapperInWebApi.Controllers
                     Users = firstTable,
                     Persons = secondTable
                 });
+            }
+        }
+
+        [HttpPut]
+        public IActionResult UpdateUser(int userId,string firstName,string lastName)
+        {
+            string? connectionString = WebApplication.CreateBuilder().Configuration.GetConnectionString("DefaultConnection");
+
+            using(SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = $"update userTable set firstName = '{firstName}',lastName = '{lastName}' where userId = {userId}";
+
+                connection.Query(query);
+
+                return Ok("Updated");
             }
         }
     }

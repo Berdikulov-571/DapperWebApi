@@ -7,6 +7,35 @@ namespace DapperInWebApi.Service
 {
     public class UserService
     {
+        public static User GetUserById(int userId)
+        {
+            string? connectionString = WebApplication.CreateBuilder().Configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                DynamicParameters dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add("userId",userId);
+                User? user = connection.QueryFirstOrDefault<User>("GetUserById",dynamicParameters,commandType:CommandType.StoredProcedure);
+
+                return user;
+            }
+        }
+
+        public static IEnumerable<User> GetUsersWithYear(int startDate, int endDate)
+        {
+            string? connectionString = WebApplication.CreateBuilder().Configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                DynamicParameters dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add("startDate", startDate);
+                dynamicParameters.Add("endDate", endDate);
+                IEnumerable<User> users = connection.Query<User>("GetUsersWithYear", dynamicParameters, commandType: CommandType.StoredProcedure);
+
+                return users;
+            }
+        }
+
         public static List<User> GetAll(string connectionString)
         {
 

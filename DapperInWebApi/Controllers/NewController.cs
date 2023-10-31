@@ -99,7 +99,7 @@ namespace DapperInWebApi.Controllers
                 }
 
                 // Task11
-                using (SqlMapper.GridReader common = await connection.QueryMultipleAsync("select * from userTable order by userId asc;select * from userTable order by userId desc"))
+                 using (SqlMapper.GridReader common = await connection.QueryMultipleAsync("select * from userTable order by userId asc;select * from userTable order by userId desc"))
                 {
                     User userAsc = await common.ReadFirstAsync<User>();
                     User userDesc = await common.ReadFirstAsync<User>();

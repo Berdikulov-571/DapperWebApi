@@ -26,7 +26,7 @@ namespace DapperInWebApi
 
             app.UseAuthorization();
 
-            app.UseWelcomePage();
+            app.UseWelcomePage("/home");
 
             app.MapControllers();
 

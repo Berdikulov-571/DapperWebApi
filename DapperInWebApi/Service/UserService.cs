@@ -36,8 +36,9 @@ namespace DapperInWebApi.Service
             }
         }
 
-        public static List<User> GetAll(string connectionString)
+        public static List<User> GetAll()
         {
+            string? connectionString = WebApplication.CreateBuilder().Configuration.GetConnectionString("DefaultConnection");
 
             using (var connection = new SqlConnection(connectionString))
             {

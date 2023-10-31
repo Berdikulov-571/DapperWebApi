@@ -14,7 +14,7 @@ namespace DapperInWebApi.Controllers
         [HttpGet]
         public IActionResult GetAllUsers()
             {
-            return Ok(UserService.GetAll(connectionString));
+            return Ok(UserService.GetAll());
         }
 
         [HttpPost]
